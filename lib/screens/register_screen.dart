@@ -11,209 +11,155 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  var keyForm = GlobalKey<FormState>();
+  final keyForm = GlobalKey<FormState>();
 
-  var emailCtrl = TextEditingController();
-  var fnameCtrl = TextEditingController();
-  var lnameCtrl= TextEditingController();
-  var confirmPassCtrl = TextEditingController();
-  var passwordCtrl = TextEditingController();
+  final emailCtrl = TextEditingController();
+  final fnameCtrl = TextEditingController();
+  final lnameCtrl = TextEditingController();
+  final confirmPassCtrl = TextEditingController();
+  final passwordCtrl = TextEditingController();
+
   bool hidePassword = true;
   bool isAgree = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-      ),
-      body: Form(
-        key: keyForm,
-        child: Padding(
-          padding: EdgeInsets.only(left: 30, right: 30),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 500),
           child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(
-                  height: 105,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/logo.png'))      
-                    ),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            child: Form(
+              key: keyForm,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset('assets/images/logo.png', height: 105),
+                  const Gap(24),
+                  Text(
+                    "Join LEGALLY AI!",
+                    style: Theme.of(context).textTheme.titleLarge,
+                    textAlign: TextAlign.center,
                   ),
-                ),
-                const Gap(25),
-                Text("Join LEGALLY AI!",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 32
+                  const Gap(12),
+                  Text(
+                    "Start simplifying legal complexities today.",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    textAlign: TextAlign.center,
                   ),
-                ),
-                const Gap(20),
-                Text("Start simplifying legal complexities today.",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16
+                  const Gap(24),
+                  TextFormField(
+                    controller: fnameCtrl,
+                    decoration: setTextDecoration('First Name'),
+                    validator: (value) =>
+                        value == null || value.isEmpty ? "*First name is required." : null,
                   ),
-                ),
-                const Gap(15),
-                TextFormField(
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: setTextDecoration('First Name'),
-                  controller: fnameCtrl,
-                  validator: (value) {
-                    if(value == null || value.isEmpty){
-                          return "*First name is required.";
-                        }
-                        
-                  },
-                ),
-                const Gap(15),
-                TextFormField(
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: setTextDecoration('Last Name'),
-                  controller: lnameCtrl,
-                  validator: (value) {
-                    if(value == null || value.isEmpty){
-                          return "*Last name is required.";
-                        }
-                        
-                  },
-                ),
-                const Gap(15),
-                TextFormField(
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: setTextDecoration('Email'),
-                  controller: emailCtrl,
-                  validator: (value) {
-                    if(value == null || value.isEmpty){
-                          return "*Email is required.";
-                        }
-                        if(!EmailValidator.validate(value)){
-                          return "*Invalid email address.";
-                        }
-                  },
-                ),
-                
-                const Gap(15),
-                TextFormField(
-                  obscureText: hidePassword,
-                  decoration: setTextDecoration('Password', isPasswordFieldTrue: true),
-                  controller: passwordCtrl,
-                  validator: (value) {
-                    if(value == null || value.isEmpty){
-                          return "*Password is required.";
-                        }
-                  },
-                ),
-                const Gap(15),
-                TextFormField(
-                  obscureText: hidePassword,
-                  decoration: setTextDecoration('Retype Password', isPasswordFieldTrue: true),
-                  controller: confirmPassCtrl,
-                  validator: (value) {
-                    if(value == null || value.isEmpty){
-                          return "*Password is required.";
-                          
-                      }
-                      if(passwordCtrl.text != confirmPassCtrl.text){
-                        return "*Password do not match";
-                      }
-                      
-                  },
-                ),
-                Row(           
-                  children:[ 
-                      Checkbox(value: isAgree, onChanged: (value){
-                      isAgree = value!;
-                      setState(() {
-                        
-                      });
-                    }),
-                    Text(
-                        "I understand and agree to the",
-                        style: TextStyle(
-                          fontSize: 12,
-                        ),
+                  const Gap(16),
+                  TextFormField(
+                    controller: lnameCtrl,
+                    decoration: setTextDecoration('Last Name'),
+                    validator: (value) =>
+                        value == null || value.isEmpty ? "*Last name is required." : null,
+                  ),
+                  const Gap(16),
+                  TextFormField(
+                    controller: emailCtrl,
+                    decoration: setTextDecoration('Email'),
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) return "*Email is required.";
+                      if (!EmailValidator.validate(value)) return "*Invalid email address.";
+                      return null;
+                    },
+                  ),
+                  const Gap(16),
+                  TextFormField(
+                    controller: passwordCtrl,
+                    obscureText: hidePassword,
+                    decoration: setTextDecoration('Password', isPasswordFieldTrue: true),
+                    validator: (value) =>
+                        value == null || value.isEmpty ? "*Password is required." : null,
+                  ),
+                  const Gap(16),
+                  TextFormField(
+                    controller: confirmPassCtrl,
+                    obscureText: hidePassword,
+                    decoration: setTextDecoration('Retype Password', isPasswordFieldTrue: true),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) return "*Password is required.";
+                      if (passwordCtrl.text != value) return "*Passwords do not match.";
+                      return null;
+                    },
+                  ),
+                  const Gap(16),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Checkbox(
+                        value: isAgree,
+                        activeColor: Theme.of(context).colorScheme.primary,
+                        onChanged: (value) => setState(() => isAgree = value!),
                       ),
-                      Flexible(
-                        child: Text(
-                          "LegallyAI terms of service including User Agreement and Privacy Policy.",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Color(0xFF493D9E),
+                      Expanded(
+                        child: RichText(
+                          text: TextSpan(
+                            style: const TextStyle(fontSize: 12, color: Colors.white),
+                            children: const [
+                              TextSpan(text: "I understand and agree to the "),
+                              TextSpan(
+                                text:
+                                    "LegallyAI terms of service including User Agreement and Privacy Policy.",
+                                style: TextStyle(color: Color(0xFFD4AF37)),
+                              ),
+                            ],
                           ),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines:3,
-                     
                         ),
                       ),
-                  
-                  ]
-                ),
-                
-                const Gap(40),
-                 Container(
-                    width: 380,
-                    height: 56,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Color(0xFF6B6399), Color(0xFFB2A5FF)],
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                      ),
-                      borderRadius: BorderRadius.circular(50),
-                    ),
+                    ],
+                  ),
+                  const Gap(24),
+                  SizedBox(
+                    width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                       if(!keyForm.currentState!.validate()){
-                          return;
-                        }
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+                        if (!keyForm.currentState!.validate()) return;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginScreen()),
+                        );
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: Text(
-                        "Sign up",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20,
-                          color: Colors.white,
-                        ),
-                      ),
+                      child: const Text("Sign up"),
                     ),
                   ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Already have an account?",
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          
-                        ),
-                    ),
-                    TextButton(onPressed: (){
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=> LoginScreen()));
-                    }, child: Text(
-                      "Login",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF493D9E)
+                  const Gap(16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Already have an account?",
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
-                    ))
-                  ],
-                )
-              ],
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => LoginScreen()),
+                          );
+                        },
+                        child: Text(
+                          "Login",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -221,35 +167,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  setTextDecoration(String label, {isPasswordFieldTrue = false}) {
+  InputDecoration setTextDecoration(String label, {bool isPasswordFieldTrue = false}) {
     return InputDecoration(
-        enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(
-          color: Color(0xFFF4F4F6), 
-          width: 1,
-        ),
-      ) ,
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(
-          color: Colors.grey, // Border color when focused
-          width: 2,
-        ),
-      ),
-      label: Text(label),
-      filled: true,
-      fillColor: Color(0xFFF4F4F6),
-      suffixIcon: isPasswordFieldTrue ? IconButton(
-        onPressed: toogleShowPassword,
-        icon: Icon(hidePassword ? Icons.visibility_off : Icons.visibility)) : null,
-        
-      );
-  }
-
-  void toogleShowPassword() {
-    setState(() {
-      hidePassword = !hidePassword;
-    });
+      labelText: label,
+      suffixIcon: isPasswordFieldTrue
+          ? IconButton(
+              icon: Icon(hidePassword ? Icons.visibility_off : Icons.visibility),
+              onPressed: () => setState(() => hidePassword = !hidePassword),
+            )
+          : null,
+    );
   }
 }
